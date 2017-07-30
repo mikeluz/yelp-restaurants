@@ -7,7 +7,8 @@ styles.table = {
   marginRight: 'auto',
   backgroundColor: "rgba(252, 252, 252, 0.9)",
   width: "80%",
-  padding: "5px"
+  padding: "5px",
+  color: "black"
 };
 
 styles.inputStyle = {

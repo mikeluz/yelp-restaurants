@@ -11962,7 +11962,8 @@ styles.table = {
   marginRight: 'auto',
   backgroundColor: "rgba(252, 252, 252, 0.9)",
   width: "80%",
-  padding: "5px"
+  padding: "5px",
+  color: "black"
 };
 
 styles.inputStyle = {
@@ -26621,6 +26622,21 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // styles
 
 
+function getCurrentTime() {
+
+  var today = Date();
+  var time = today.toString().slice(15, 24);
+
+  var hmsArr = time.split(":");
+
+  if (hmsArr[0] > 12) {
+    hmsArr[0] = hmsArr[0] - 12;
+    return hmsArr.join(":") + " PM EST";
+  } else {
+    return time + " AM EST";
+  }
+}
+
 var Restaurants = function (_React$Component) {
   _inherits(Restaurants, _React$Component);
 
@@ -26701,19 +26717,14 @@ var Restaurants = function (_React$Component) {
           _react2['default'].createElement(
             'h1',
             null,
-            'ARE THEY OPEN?'
+            'It is now ',
+            getCurrentTime(),
+            '. Time to eat!'
           ),
-          _react2['default'].createElement(
-            'h3',
-            null,
-            Date()
-          ),
-          _react2['default'].createElement(
-            'h1',
-            null,
-            'ENTER CITY, STATE (or ZIP CODE)'
-          ),
-          _react2['default'].createElement('input', { onChange: this.handleChange.bind(this) }),
+          _react2['default'].createElement('input', {
+            onChange: this.handleChange.bind(this),
+            placeholder: 'ENTER CITY AND STATE, OR ZIP CODE'
+          }),
           _react2['default'].createElement('br', null),
           this.state.offset > 0 && _react2['default'].createElement(
             'button',
@@ -26725,8 +26736,14 @@ var Restaurants = function (_React$Component) {
             { onClick: this.handleClick.bind(this) },
             'MORE'
           ),
+          this.props.restaurants && _react2['default'].createElement(_RestaurantsTable2['default'], { restaurants: this.props.restaurants }),
           _react2['default'].createElement('br', null),
-          this.props.restaurants && _react2['default'].createElement(_RestaurantsTable2['default'], { restaurants: this.props.restaurants })
+          _react2['default'].createElement(
+            'h1',
+            null,
+            'powered by'
+          ),
+          _react2['default'].createElement('div', { id: 'yelpLogo' })
         );
       }
 

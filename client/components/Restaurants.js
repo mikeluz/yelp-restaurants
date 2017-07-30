@@ -8,6 +8,22 @@ import styles from '../utils/styles.js';
 
 import store from '../store';
 
+function getCurrentTime() {
+
+  var today = Date();
+  var time = today.toString().slice(15, 24);
+
+  var hmsArr = time.split(":");
+
+  if (hmsArr[0] > 12) {
+    hmsArr[0] = hmsArr[0] - 12;
+    return hmsArr.join(":") + " PM EST";
+  } else {
+    return time + " AM EST";
+  }
+
+}
+
 class Restaurants extends React.Component {
 
   constructor(props) {
@@ -64,19 +80,22 @@ class Restaurants extends React.Component {
   render() {
     return (
       <div id="inputContainer" style={styles.inputContainerStyle}>
-      <h1>ARE THEY OPEN?</h1>
-      <h3>{Date()}</h3>
-      <h1>ENTER CITY, STATE (or ZIP CODE)</h1>
-      <input onChange={this.handleChange.bind(this)}></input>
+      <h1>It is now {getCurrentTime()}. Time to eat!</h1>
+      <input 
+      onChange={this.handleChange.bind(this)}
+      placeholder="ENTER CITY AND STATE, OR ZIP CODE"
+      ></input>
       <br/>
       {
         this.state.offset > 0 && <button onClick={this.handleBack.bind(this)}>BACK</button>
       }
       <button onClick={this.handleClick.bind(this)}>MORE</button>
-      <br/>
       {
         this.props.restaurants && <RestaurantsTable restaurants={this.props.restaurants} />
       }
+      <br/>
+      <h1>powered by</h1>
+      <div id="yelpLogo"></div>
       </div>
     )
   }
