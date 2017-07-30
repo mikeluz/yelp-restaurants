@@ -26716,10 +26716,10 @@ var Restaurants = function (_React$Component) {
           { id: 'inputContainer', style: _styles2['default'].inputContainerStyle },
           _react2['default'].createElement(
             'h1',
-            null,
-            'It is now ',
+            { id: 'time' },
+            'It\'s ',
             getCurrentTime(),
-            '. Time to eat!'
+            ' -- Find a restaurant!'
           ),
           _react2['default'].createElement('input', {
             onChange: this.handleChange.bind(this),
@@ -26737,13 +26737,7 @@ var Restaurants = function (_React$Component) {
             'MORE'
           ),
           this.props.restaurants && _react2['default'].createElement(_RestaurantsTable2['default'], { restaurants: this.props.restaurants }),
-          _react2['default'].createElement('br', null),
-          _react2['default'].createElement(
-            'h1',
-            null,
-            'powered by'
-          ),
-          _react2['default'].createElement('div', { id: 'yelpLogo' })
+          _react2['default'].createElement('br', null)
         );
       }
 

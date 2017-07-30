@@ -80,7 +80,7 @@ class Restaurants extends React.Component {
   render() {
     return (
       <div id="inputContainer" style={styles.inputContainerStyle}>
-      <h1>It is now {getCurrentTime()}. Time to eat!</h1>
+      <h1 id="time">It's {getCurrentTime()} -- Find a restaurant!</h1>
       <input 
       onChange={this.handleChange.bind(this)}
       placeholder="ENTER CITY AND STATE, OR ZIP CODE"
@@ -94,8 +94,6 @@ class Restaurants extends React.Component {
         this.props.restaurants && <RestaurantsTable restaurants={this.props.restaurants} />
       }
       <br/>
-      <h1>powered by</h1>
-      <div id="yelpLogo"></div>
       </div>
     )
   }
