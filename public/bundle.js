@@ -26661,6 +26661,16 @@ var Restaurants = function (_React$Component) {
           _react2['default'].createElement(
             'h1',
             null,
+            'ARE THEY OPEN?'
+          ),
+          _react2['default'].createElement(
+            'h3',
+            null,
+            Date()
+          ),
+          _react2['default'].createElement(
+            'h1',
+            null,
             'ENTER CITY, STATE (or ZIP CODE)'
           ),
           _react2['default'].createElement('input', { onChange: this.handleChange.bind(this) }),
@@ -26741,6 +26751,11 @@ var RestaurantsTable = function () {
 						'th',
 						null,
 						'Price'
+					),
+					_react2['default'].createElement(
+						'th',
+						null,
+						'Open?'
 					)
 				)
 			),
@@ -26768,7 +26783,7 @@ var RestaurantsTable = function () {
 						_react2['default'].createElement(
 							'td',
 							null,
-							restaurant.phone
+							restaurant.display_phone
 						),
 						_react2['default'].createElement(
 							'td',
@@ -26779,6 +26794,11 @@ var RestaurantsTable = function () {
 							'td',
 							null,
 							restaurant.price
+						),
+						_react2['default'].createElement(
+							'td',
+							null,
+							restaurant.is_closed ? "NO" : "YES"
 						)
 					);
 				})

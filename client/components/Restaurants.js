@@ -33,6 +33,8 @@ class Restaurants extends React.Component {
   render() {
     return (
       <div id="inputContainer" style={styles.inputContainerStyle}>
+      <h1>ARE THEY OPEN?</h1>
+      <h3>{Date()}</h3>
       <h1>ENTER CITY, STATE (or ZIP CODE)</h1>
       <input onChange={this.handleChange.bind(this)}></input>
       <br/><br/>
