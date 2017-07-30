@@ -26630,7 +26630,8 @@ var Restaurants = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (Restaurants.__proto__ || Object.getPrototypeOf(Restaurants)).call(this, props));
 
     _this.state = {
-      city: ""
+      city: "",
+      offset: 0
     };
     return _this;
   }
@@ -26640,16 +26641,37 @@ var Restaurants = function (_React$Component) {
     value: function () {
       function handleChange(evt) {
         if (evt.target.value.length > 3) {
-          _axios2['default'].get('/api/restaurants/' + evt.target.value).then(function (res) {
+          _axios2['default'].get('/api/restaurants/' + evt.target.value + '/' + this.state.offset).then(function (res) {
             _store2['default'].dispatch({
               type: "SET_RESTAURANTS",
               restaurants: res.data
             });
           });
+          this.setState({
+            city: evt.target.value
+          });
         }
       }
 
       return handleChange;
+    }()
+  }, {
+    key: 'handleClick',
+    value: function () {
+      function handleClick() {
+        var offsetValue = this.state.offset + 20;
+        _axios2['default'].get('/api/restaurants/' + this.state.city + '/' + offsetValue).then(function (res) {
+          _store2['default'].dispatch({
+            type: "SET_RESTAURANTS",
+            restaurants: res.data
+          });
+        });
+        this.setState({
+          offset: this.state.offset + 20
+        });
+      }
+
+      return handleClick;
     }()
   }, {
     key: 'render',
@@ -26675,6 +26697,11 @@ var Restaurants = function (_React$Component) {
           ),
           _react2['default'].createElement('input', { onChange: this.handleChange.bind(this) }),
           _react2['default'].createElement('br', null),
+          _react2['default'].createElement(
+            'button',
+            { onClick: this.handleClick.bind(this) },
+            'MORE'
+          ),
           _react2['default'].createElement('br', null),
           this.props.restaurants && _react2['default'].createElement(_RestaurantsTable2['default'], { restaurants: this.props.restaurants })
         );
