@@ -15,7 +15,8 @@ h1 {
 
 button {
 	padding: 10px;
-	background-color: transparent;
+  /*background-color: rgba(252, 252, 252, 0.4);*/
+  background-color: transparent;
 	color: white;
 	margin: 5px;
 }

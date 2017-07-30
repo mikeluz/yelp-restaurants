@@ -41,6 +41,7 @@ styles.inputContainerStyle = {
   margin: "auto",
   width: "100%",
   zIndex: "5",
+  paddingTop: "10px"
 };
 
 styles.mapStyle = {
