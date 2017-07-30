@@ -47,6 +47,20 @@ class Restaurants extends React.Component {
     });
   }
 
+  handleBack() {
+    var offsetValue = this.state.offset - 20;
+      axios.get(`/api/restaurants/${this.state.city}/${offsetValue}`)
+        .then(res => {    
+          store.dispatch({
+            type: "SET_RESTAURANTS", 
+            restaurants: res.data
+          });
+        });
+    this.setState({
+      offset: this.state.offset - 20
+    });
+  }
+
   render() {
     return (
       <div id="inputContainer" style={styles.inputContainerStyle}>
@@ -55,6 +69,9 @@ class Restaurants extends React.Component {
       <h1>ENTER CITY, STATE (or ZIP CODE)</h1>
       <input onChange={this.handleChange.bind(this)}></input>
       <br/>
+      {
+        this.state.offset > 0 && <button onClick={this.handleBack.bind(this)}>BACK</button>
+      }
       <button onClick={this.handleClick.bind(this)}>MORE</button>
       <br/>
       {

@@ -26674,6 +26674,24 @@ var Restaurants = function (_React$Component) {
       return handleClick;
     }()
   }, {
+    key: 'handleBack',
+    value: function () {
+      function handleBack() {
+        var offsetValue = this.state.offset - 20;
+        _axios2['default'].get('/api/restaurants/' + this.state.city + '/' + offsetValue).then(function (res) {
+          _store2['default'].dispatch({
+            type: "SET_RESTAURANTS",
+            restaurants: res.data
+          });
+        });
+        this.setState({
+          offset: this.state.offset - 20
+        });
+      }
+
+      return handleBack;
+    }()
+  }, {
     key: 'render',
     value: function () {
       function render() {
@@ -26697,6 +26715,11 @@ var Restaurants = function (_React$Component) {
           ),
           _react2['default'].createElement('input', { onChange: this.handleChange.bind(this) }),
           _react2['default'].createElement('br', null),
+          this.state.offset > 0 && _react2['default'].createElement(
+            'button',
+            { onClick: this.handleBack.bind(this) },
+            'BACK'
+          ),
           _react2['default'].createElement(
             'button',
             { onClick: this.handleClick.bind(this) },
