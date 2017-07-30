@@ -11,7 +11,8 @@ const RestaurantsTable = ({restaurants}) => (
 	    <th>Address</th>
 	    <th>Phone Number</th>
 	    <th>Rating</th>
-	    <th>Price</th> 
+	    <th>Price</th>
+	    <th>Open?</th>
 	  </tr>
   </thead>
   <tbody>
@@ -20,9 +21,10 @@ const RestaurantsTable = ({restaurants}) => (
 		  <tr key={restaurant.id}>
 		    <td><a href={restaurant.url}>{restaurant.name}</a></td>
 		    <td>{restaurant.location.address1}</td>
-		    <td>{restaurant.phone}</td>
+		    <td>{restaurant.display_phone}</td>
 		    <td>{restaurant.rating}</td> 
 		    <td>{restaurant.price}</td>
+		    <td>{restaurant.is_closed ? "NO" : "YES" }</td>
 		  </tr>
   	))
   }

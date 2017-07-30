@@ -13,29 +13,67 @@ class Restaurants extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      city: ""
+      city: "",
+      offset: 0
     };
   }
 
   handleChange(evt) {
     if (evt.target.value.length > 3) {
-      axios.get(`/api/restaurants/${evt.target.value}`)
+      axios.get(`/api/restaurants/${evt.target.value}/${this.state.offset}`)
         .then(res => {    
           store.dispatch({
             type: "SET_RESTAURANTS", 
             restaurants: res.data
           });
         });
+      this.setState({
+        city: evt.target.value
+      });
     }
+  }
 
+  handleClick() {
+    var offsetValue = this.state.offset + 20;
+      axios.get(`/api/restaurants/${this.state.city}/${offsetValue}`)
+        .then(res => {    
+          store.dispatch({
+            type: "SET_RESTAURANTS", 
+            restaurants: res.data
+          });
+        });
+    this.setState({
+      offset: this.state.offset + 20
+    });
+  }
+
+  handleBack() {
+    var offsetValue = this.state.offset - 20;
+      axios.get(`/api/restaurants/${this.state.city}/${offsetValue}`)
+        .then(res => {    
+          store.dispatch({
+            type: "SET_RESTAURANTS", 
+            restaurants: res.data
+          });
+        });
+    this.setState({
+      offset: this.state.offset - 20
+    });
   }
 
   render() {
     return (
       <div id="inputContainer" style={styles.inputContainerStyle}>
+      <h1>ARE THEY OPEN?</h1>
+      <h3>{Date()}</h3>
       <h1>ENTER CITY, STATE (or ZIP CODE)</h1>
       <input onChange={this.handleChange.bind(this)}></input>
-      <br/><br/>
+      <br/>
+      {
+        this.state.offset > 0 && <button onClick={this.handleBack.bind(this)}>BACK</button>
+      }
+      <button onClick={this.handleClick.bind(this)}>MORE</button>
+      <br/>
       {
         this.props.restaurants && <RestaurantsTable restaurants={this.props.restaurants} />
       }

@@ -26630,7 +26630,8 @@ var Restaurants = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (Restaurants.__proto__ || Object.getPrototypeOf(Restaurants)).call(this, props));
 
     _this.state = {
-      city: ""
+      city: "",
+      offset: 0
     };
     return _this;
   }
@@ -26640,16 +26641,55 @@ var Restaurants = function (_React$Component) {
     value: function () {
       function handleChange(evt) {
         if (evt.target.value.length > 3) {
-          _axios2['default'].get('/api/restaurants/' + evt.target.value).then(function (res) {
+          _axios2['default'].get('/api/restaurants/' + evt.target.value + '/' + this.state.offset).then(function (res) {
             _store2['default'].dispatch({
               type: "SET_RESTAURANTS",
               restaurants: res.data
             });
           });
+          this.setState({
+            city: evt.target.value
+          });
         }
       }
 
       return handleChange;
+    }()
+  }, {
+    key: 'handleClick',
+    value: function () {
+      function handleClick() {
+        var offsetValue = this.state.offset + 20;
+        _axios2['default'].get('/api/restaurants/' + this.state.city + '/' + offsetValue).then(function (res) {
+          _store2['default'].dispatch({
+            type: "SET_RESTAURANTS",
+            restaurants: res.data
+          });
+        });
+        this.setState({
+          offset: this.state.offset + 20
+        });
+      }
+
+      return handleClick;
+    }()
+  }, {
+    key: 'handleBack',
+    value: function () {
+      function handleBack() {
+        var offsetValue = this.state.offset - 20;
+        _axios2['default'].get('/api/restaurants/' + this.state.city + '/' + offsetValue).then(function (res) {
+          _store2['default'].dispatch({
+            type: "SET_RESTAURANTS",
+            restaurants: res.data
+          });
+        });
+        this.setState({
+          offset: this.state.offset - 20
+        });
+      }
+
+      return handleBack;
     }()
   }, {
     key: 'render',
@@ -26661,10 +26701,30 @@ var Restaurants = function (_React$Component) {
           _react2['default'].createElement(
             'h1',
             null,
+            'ARE THEY OPEN?'
+          ),
+          _react2['default'].createElement(
+            'h3',
+            null,
+            Date()
+          ),
+          _react2['default'].createElement(
+            'h1',
+            null,
             'ENTER CITY, STATE (or ZIP CODE)'
           ),
           _react2['default'].createElement('input', { onChange: this.handleChange.bind(this) }),
           _react2['default'].createElement('br', null),
+          this.state.offset > 0 && _react2['default'].createElement(
+            'button',
+            { onClick: this.handleBack.bind(this) },
+            'BACK'
+          ),
+          _react2['default'].createElement(
+            'button',
+            { onClick: this.handleClick.bind(this) },
+            'MORE'
+          ),
           _react2['default'].createElement('br', null),
           this.props.restaurants && _react2['default'].createElement(_RestaurantsTable2['default'], { restaurants: this.props.restaurants })
         );
@@ -26741,6 +26801,11 @@ var RestaurantsTable = function () {
 						'th',
 						null,
 						'Price'
+					),
+					_react2['default'].createElement(
+						'th',
+						null,
+						'Open?'
 					)
 				)
 			),
@@ -26768,7 +26833,7 @@ var RestaurantsTable = function () {
 						_react2['default'].createElement(
 							'td',
 							null,
-							restaurant.phone
+							restaurant.display_phone
 						),
 						_react2['default'].createElement(
 							'td',
@@ -26779,6 +26844,11 @@ var RestaurantsTable = function () {
 							'td',
 							null,
 							restaurant.price
+						),
+						_react2['default'].createElement(
+							'td',
+							null,
+							restaurant.is_closed ? "NO" : "YES"
 						)
 					);
 				})
