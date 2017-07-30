@@ -1,0 +1,40 @@
+html {
+	background-color: white;
+  margin: 0;
+	padding: 0;
+	background-image: url("./yelplogo.jpeg");
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+h1 {
+	background-color: white;
+}
+
+button {
+	padding: 20px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+#app {
+	font-family: 'Roboto', sans-serif;
+	text-align: center;
+	margin: auto;
+}
+
+button {
+	font-family: 'Roboto', sans-serif;
+}
+
+input {
+	width: 400px;
+	padding: 20px;
+	font-size: 20px;
+	background-color: rgba(255, 255, 255, 0.8);
+}
