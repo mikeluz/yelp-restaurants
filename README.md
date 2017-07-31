@@ -18,7 +18,7 @@ Directions for local install:
 6. Once Yelp API credentials are in place, navigate to "localhost:3001" in browser.
 7. Get hungry!
 
-#yelpconfig.js
+# yelpconfig.js
 
 To use the Yelp API, you will need to register the app:
 https://www.yelp.com/developers/v3/manage_app
