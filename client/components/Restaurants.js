@@ -6,30 +6,17 @@ import RestaurantsTable from './RestaurantsTable';
 // styles
 import styles from '../utils/styles.js';
 
+// utils
+import {getCurrentTime} from '../utils/utils.js';
+
 import store from '../store';
-
-function getCurrentTime() {
-
-  var today = Date();
-  var time = today.toString().slice(15, 24);
-
-  var hmsArr = time.split(":");
-
-  if (hmsArr[0] > 12) {
-    hmsArr[0] = hmsArr[0] - 12;
-    return hmsArr.join(":") + " PM EST";
-  } else {
-    return time + " AM EST";
-  }
-
-}
 
 class Restaurants extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      city: "",
+      city: "ENTER CITY AND STATE, OR ZIP CODE",
       offset: 0
     };
   }
@@ -77,32 +64,56 @@ class Restaurants extends React.Component {
     });
   }
 
+  locate() {
+    var options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    };
+    var geo = navigator.geolocation;
+    var coors = geo.getCurrentPosition(pos => {
+      axios.get(`/api/restaurants/coords/${pos.coords.latitude}/${pos.coords.longitude}`)
+        .then(res => {    
+          store.dispatch({
+            type: "SET_RESTAURANTS", 
+            restaurants: res.data
+          });
+          this.setState({
+            city: res.data.businesses[0].location.city
+          });
+        });
+    }, null, options);
+  }
+
   render() {
     return (
       <div id="inputContainer" style={styles.inputContainerStyle}>
-      <h1 id="time">It's {getCurrentTime()} -- Find a restaurant!</h1>
-      <input 
-      onChange={this.handleChange.bind(this)}
-      placeholder="ENTER CITY AND STATE, OR ZIP CODE"
-      ></input>
-      <br/>
-      {
-        this.state.offset > 0 && <button onClick={this.handleBack.bind(this)}>BACK</button>
-      }
-      <button onClick={this.handleClick.bind(this)}>MORE</button>
-      {
-        this.props.restaurants && <RestaurantsTable restaurants={this.props.restaurants} />
-      }
-      <br/>
+        <h1 id="time">It's {getCurrentTime()} -- Hungry? Find a restaurant!</h1>
+        <input 
+        onChange={this.handleChange.bind(this)}
+        placeholder={this.state.city}
+        ></input>
+        <br/>
+        <button onClick={this.locate.bind(this)}>FIND ME</button>
+        {
+          this.state.offset > 0 && <button onClick={this.handleBack.bind(this)}>BACK</button>
+        }
+        {
+          this.props.restaurants && <button onClick={this.handleClick.bind(this)}>MORE</button>
+        }
+        {
+          this.props.restaurants && <RestaurantsTable restaurants={this.props.restaurants} />
+        }
+        <br/>
       </div>
     )
   }
 }
 
-import {connect} from 'react-redux';
+import {connect} from 'react-redux'
 
 export default connect(
   ({restaurants}) => ({
     restaurants: restaurants
-  }), {},
+  }), {}
 )(Restaurants)

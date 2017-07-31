@@ -11995,7 +11995,8 @@ styles.inputContainerStyle = {
   position: "relative",
   margin: "auto",
   width: "100%",
-  zIndex: "5"
+  zIndex: "5",
+  paddingTop: "10px"
 };
 
 styles.mapStyle = {
@@ -26605,6 +26606,8 @@ var _styles = __webpack_require__(106);
 
 var _styles2 = _interopRequireDefault(_styles);
 
+var _utils = __webpack_require__(261);
+
 var _store = __webpack_require__(55);
 
 var _store2 = _interopRequireDefault(_store);
@@ -26622,20 +26625,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // styles
 
 
-function getCurrentTime() {
+// utils
 
-  var today = Date();
-  var time = today.toString().slice(15, 24);
-
-  var hmsArr = time.split(":");
-
-  if (hmsArr[0] > 12) {
-    hmsArr[0] = hmsArr[0] - 12;
-    return hmsArr.join(":") + " PM EST";
-  } else {
-    return time + " AM EST";
-  }
-}
 
 var Restaurants = function (_React$Component) {
   _inherits(Restaurants, _React$Component);
@@ -26646,7 +26637,7 @@ var Restaurants = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (Restaurants.__proto__ || Object.getPrototypeOf(Restaurants)).call(this, props));
 
     _this.state = {
-      city: "",
+      city: "ENTER CITY AND STATE, OR ZIP CODE",
       offset: 0
     };
     return _this;
@@ -26708,6 +26699,33 @@ var Restaurants = function (_React$Component) {
       return handleBack;
     }()
   }, {
+    key: 'locate',
+    value: function () {
+      function locate() {
+        var _this2 = this;
+
+        var options = {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0
+        };
+        var geo = navigator.geolocation;
+        var coors = geo.getCurrentPosition(function (pos) {
+          _axios2['default'].get('/api/restaurants/coords/' + pos.coords.latitude + '/' + pos.coords.longitude).then(function (res) {
+            _store2['default'].dispatch({
+              type: "SET_RESTAURANTS",
+              restaurants: res.data
+            });
+            _this2.setState({
+              city: res.data.businesses[0].location.city
+            });
+          });
+        }, null, options);
+      }
+
+      return locate;
+    }()
+  }, {
     key: 'render',
     value: function () {
       function render() {
@@ -26718,20 +26736,25 @@ var Restaurants = function (_React$Component) {
             'h1',
             { id: 'time' },
             'It\'s ',
-            getCurrentTime(),
-            ' -- Find a restaurant!'
+            (0, _utils.getCurrentTime)(),
+            ' -- Hungry? Find a restaurant!'
           ),
           _react2['default'].createElement('input', {
             onChange: this.handleChange.bind(this),
-            placeholder: 'ENTER CITY AND STATE, OR ZIP CODE'
+            placeholder: this.state.city
           }),
           _react2['default'].createElement('br', null),
+          _react2['default'].createElement(
+            'button',
+            { onClick: this.locate.bind(this) },
+            'FIND ME'
+          ),
           this.state.offset > 0 && _react2['default'].createElement(
             'button',
             { onClick: this.handleBack.bind(this) },
             'BACK'
           ),
-          _react2['default'].createElement(
+          this.props.restaurants && _react2['default'].createElement(
             'button',
             { onClick: this.handleClick.bind(this) },
             'MORE'
@@ -26766,6 +26789,8 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _react = __webpack_require__(17);
 
 var _react2 = _interopRequireDefault(_react);
@@ -26774,103 +26799,215 @@ var _styles = __webpack_require__(106);
 
 var _styles2 = _interopRequireDefault(_styles);
 
+var _utils = __webpack_require__(261);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var RestaurantsTable = function () {
-	function RestaurantsTable(_ref) {
-		var restaurants = _ref.restaurants;
-		return _react2['default'].createElement(
-			'table',
-			{ id: 'restaurant-table', style: _styles2['default'].table },
-			_react2['default'].createElement(
-				'thead',
-				null,
-				_react2['default'].createElement(
-					'tr',
-					null,
-					_react2['default'].createElement(
-						'th',
-						null,
-						'Name'
-					),
-					_react2['default'].createElement(
-						'th',
-						null,
-						'Address'
-					),
-					_react2['default'].createElement(
-						'th',
-						null,
-						'Phone Number'
-					),
-					_react2['default'].createElement(
-						'th',
-						null,
-						'Rating'
-					),
-					_react2['default'].createElement(
-						'th',
-						null,
-						'Price'
-					),
-					_react2['default'].createElement(
-						'th',
-						null,
-						'Open?'
-					)
-				)
-			),
-			_react2['default'].createElement(
-				'tbody',
-				null,
-				restaurants.businesses.map(function (restaurant) {
-					return _react2['default'].createElement(
-						'tr',
-						{ key: restaurant.id },
-						_react2['default'].createElement(
-							'td',
-							null,
-							_react2['default'].createElement(
-								'a',
-								{ href: restaurant.url },
-								restaurant.name
-							)
-						),
-						_react2['default'].createElement(
-							'td',
-							null,
-							restaurant.location.address1
-						),
-						_react2['default'].createElement(
-							'td',
-							null,
-							restaurant.display_phone
-						),
-						_react2['default'].createElement(
-							'td',
-							null,
-							restaurant.rating
-						),
-						_react2['default'].createElement(
-							'td',
-							null,
-							restaurant.price
-						),
-						_react2['default'].createElement(
-							'td',
-							null,
-							restaurant.is_closed ? "NO" : "YES"
-						)
-					);
-				})
-			)
-		);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// styles
+
+
+// utils
+
+
+var RestaurantsTable = function (_React$Component) {
+	_inherits(RestaurantsTable, _React$Component);
+
+	function RestaurantsTable(props) {
+		_classCallCheck(this, RestaurantsTable);
+
+		var _this = _possibleConstructorReturn(this, (RestaurantsTable.__proto__ || Object.getPrototypeOf(RestaurantsTable)).call(this, props));
+
+		_this.state = {
+			sortDirection: ""
+		};
+		return _this;
 	}
 
+	_createClass(RestaurantsTable, [{
+		key: 'handleSortClick',
+		value: function () {
+			function handleSortClick(evt) {
+				(0, _utils.sort)(this.props.restaurants.businesses, evt.target.innerText.toLowerCase(), this.state.sortDirection);
+				if (this.state.sortDirection === "") {
+					this.setState({
+						sortDirection: "asc"
+					});
+				} else {
+					this.setState({
+						sortDirection: ""
+					});
+				}
+			}
+
+			return handleSortClick;
+		}()
+	}, {
+		key: 'render',
+		value: function () {
+			function render() {
+				return _react2['default'].createElement(
+					'table',
+					{ id: 'restaurant-table', style: _styles2['default'].table },
+					_react2['default'].createElement(
+						'thead',
+						null,
+						_react2['default'].createElement(
+							'tr',
+							null,
+							_react2['default'].createElement(
+								'th',
+								null,
+								'Name'
+							),
+							_react2['default'].createElement(
+								'th',
+								null,
+								'Address'
+							),
+							_react2['default'].createElement(
+								'th',
+								null,
+								'Phone Number'
+							),
+							_react2['default'].createElement(
+								'th',
+								null,
+								_react2['default'].createElement(
+									'a',
+									{ onClick: this.handleSortClick.bind(this) },
+									'Rating'
+								)
+							),
+							_react2['default'].createElement(
+								'th',
+								null,
+								_react2['default'].createElement(
+									'a',
+									{ onClick: this.handleSortClick.bind(this) },
+									'Price'
+								)
+							),
+							_react2['default'].createElement(
+								'th',
+								null,
+								'Open?'
+							)
+						)
+					),
+					_react2['default'].createElement(
+						'tbody',
+						null,
+						this.props.restaurants.businesses.map(function (restaurant) {
+							return _react2['default'].createElement(
+								'tr',
+								{ key: restaurant.id },
+								_react2['default'].createElement(
+									'td',
+									null,
+									_react2['default'].createElement(
+										'a',
+										{ href: restaurant.url },
+										restaurant.name
+									)
+								),
+								_react2['default'].createElement(
+									'td',
+									null,
+									restaurant.location.address1
+								),
+								_react2['default'].createElement(
+									'td',
+									null,
+									restaurant.display_phone
+								),
+								_react2['default'].createElement(
+									'td',
+									null,
+									restaurant.rating
+								),
+								_react2['default'].createElement(
+									'td',
+									null,
+									restaurant.price
+								),
+								_react2['default'].createElement(
+									'td',
+									null,
+									restaurant.is_closed ? "NO" : "YES"
+								)
+							);
+						})
+					)
+				);
+			}
+
+			return render;
+		}()
+	}]);
+
 	return RestaurantsTable;
-}();
+}(_react2['default'].Component);
 
 exports['default'] = RestaurantsTable;
+
+/***/ }),
+/* 260 */,
+/* 261 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function getCurrentTime() {
+	var today = Date();
+	var time = today.toString().slice(15, 24);
+	var hmsArr = time.split(":");
+	if (hmsArr[0] > 12) {
+		hmsArr[0] = hmsArr[0] - 12;
+		return hmsArr.join(":") + " PM EST";
+	} else {
+		return time + " AM EST";
+	}
+}
+
+function sort(arrayOfObjects, sortField, direction) {
+	if (typeof arrayOfObjects[0][sortField] === "number") {
+		arrayOfObjects.sort(function (a, b) {
+			if (direction === "asc") {
+				return a[sortField] - b[sortField];
+			} else {
+				return b[sortField] - a[sortField];
+			}
+		});
+	}
+
+	if (typeof arrayOfObjects[0][sortField] === "string") {
+		arrayOfObjects.sort(function (a, b) {
+			if (!a[sortField]) {
+				a[sortField] = "";
+			}
+			if (!b[sortField]) {
+				b[sortField] = "";
+			}
+			if (direction === "asc") {
+				return a[sortField].length - b[sortField].length;
+			} else {
+				return b[sortField].length - a[sortField].length;
+			}
+		});
+	}
+}
+
+module.exports = {
+	getCurrentTime: getCurrentTime,
+	sort: sort
+};
 
 /***/ })
 /******/ ]);
