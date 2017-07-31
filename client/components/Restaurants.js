@@ -83,38 +83,37 @@ class Restaurants extends React.Component {
           });
         });
     }, null, options);
-
   }
 
   render() {
     return (
       <div id="inputContainer" style={styles.inputContainerStyle}>
-      <h1 id="time">It's {getCurrentTime()} -- Hungry? Find a restaurant!</h1>
-      <input 
-      onChange={this.handleChange.bind(this)}
-      placeholder={this.state.city}
-      ></input>
-      <br/>
-      <button onClick={this.locate.bind(this)}>FIND ME</button>
-      {
-        this.state.offset > 0 && <button onClick={this.handleBack.bind(this)}>BACK</button>
-      }
-      {
-        this.props.restaurants && <button onClick={this.handleClick.bind(this)}>MORE</button>
-      }
-      {
-        this.props.restaurants && <RestaurantsTable restaurants={this.props.restaurants} />
-      }
-      <br/>
+        <h1 id="time">It's {getCurrentTime()} -- Hungry? Find a restaurant!</h1>
+        <input 
+        onChange={this.handleChange.bind(this)}
+        placeholder={this.state.city}
+        ></input>
+        <br/>
+        <button onClick={this.locate.bind(this)}>FIND ME</button>
+        {
+          this.state.offset > 0 && <button onClick={this.handleBack.bind(this)}>BACK</button>
+        }
+        {
+          this.props.restaurants && <button onClick={this.handleClick.bind(this)}>MORE</button>
+        }
+        {
+          this.props.restaurants && <RestaurantsTable restaurants={this.props.restaurants} />
+        }
+        <br/>
       </div>
     )
-  };
-};
+  }
+}
 
-import {connect} from 'react-redux';
+import {connect} from 'react-redux'
 
 export default connect(
   ({restaurants}) => ({
     restaurants: restaurants
-  }), {},
+  }), {}
 )(Restaurants)

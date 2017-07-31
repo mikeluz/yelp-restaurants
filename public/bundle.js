@@ -26771,8 +26771,6 @@ var Restaurants = function (_React$Component) {
   return Restaurants;
 }(_react2['default'].Component);
 
-;
-
 exports['default'] = (0, _reactRedux.connect)(function (_ref) {
   var restaurants = _ref.restaurants;
   return {

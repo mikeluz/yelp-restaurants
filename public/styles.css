@@ -10,12 +10,10 @@ html {
 
 h1 {
 	background-color: transparent;
-	/*border: 1px solid white;*/
 }
 
 button {
 	padding: 10px;
-  /*background-color: rgba(252, 252, 252, 0.4);*/
   background-color: transparent;
 	color: white;
 	margin: 5px;
@@ -26,33 +24,21 @@ button {
 }
 
 #yelpLogo {
-	/*background-image: url("./yelplogo.jpeg");*/
 	background-repeat: no-repeat;
 	background-position: center;
-	/*height: 200px;*/
   position: fixed;
   bottom: 0;
   top: 0;
-	/*opacity: 0.5;*/
 }
 
 #header {
   height: 70px;
   width: 100%;
-	/*background-image: url("./yelplogo.jpeg");*/
   background-position: right bottom;
   background-repeat: no-repeat;
   background-color: white;
   position: fixed;
   top: 0;
-}
-
-table {
-	/*background-image: url("./yelplogo.jpeg");*/
-	/*background-repeat: no-repeat;*/
-	/*background-position: center;*/
-	/*background-size: 100%;*/
-	/*opacity: 0.5;*/
 }
 
 body {
