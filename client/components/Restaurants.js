@@ -17,10 +17,12 @@ class Restaurants extends React.Component {
     super(props);
     this.state = {
       city: "ENTER CITY AND STATE, OR ZIP CODE",
-      offset: 0
+      offset: 0,
+      isLoading: false
     };
   }
 
+  // live load as you type -- starts making calls with string length > 3
   handleChange(evt) {
     if (evt.target.value.length > 3) {
       axios.get(`/api/restaurants/${evt.target.value}/${this.state.offset}`)
@@ -36,6 +38,7 @@ class Restaurants extends React.Component {
     }
   }
 
+  // get next 20 results
   handleClick() {
     var offsetValue = this.state.offset + 20;
       axios.get(`/api/restaurants/${this.state.city}/${offsetValue}`)
@@ -50,6 +53,7 @@ class Restaurants extends React.Component {
     });
   }
 
+  // go back 20 results
   handleBack() {
     var offsetValue = this.state.offset - 20;
       axios.get(`/api/restaurants/${this.state.city}/${offsetValue}`)
@@ -64,7 +68,11 @@ class Restaurants extends React.Component {
     });
   }
 
+  // using the browser's navigator.geolocation feature, get the user's coords and use those in API call to Yelp
   locate() {
+    this.setState({
+      isLoading: true
+    })
     var options = {
       enableHighAccuracy: true,
       timeout: 5000,
@@ -79,10 +87,24 @@ class Restaurants extends React.Component {
             restaurants: res.data
           });
           this.setState({
-            city: res.data.businesses[0].location.city
+            city: res.data.businesses[0].location.city,
+            isLoading: false
           });
         });
     }, null, options);
+  }
+
+  // start over functionality
+  reload() {
+    document.getElementsByTagName('input')[0].value = "";
+    this.setState({
+      city: "ENTER CITY AND STATE, OR ZIP CODE",
+      offset: 0
+    });
+    store.dispatch({
+      type: "SET_RESTAURANTS", 
+      restaurants: null
+    });
   }
 
   render() {
@@ -94,7 +116,15 @@ class Restaurants extends React.Component {
         placeholder={this.state.city}
         ></input>
         <br/>
-        <button onClick={this.locate.bind(this)}>FIND ME</button>
+        {
+          (!this.props.restaurants && !this.state.isLoading) && <button onClick={this.locate.bind(this)}>FIND ME</button>
+        }
+        {
+          (this.props.restaurants && !this.state.isLoading) && <button onClick={this.reload.bind(this)}>TRY AGAIN</button>
+        }
+        {
+          this.state.isLoading && <h1>Loading...</h1>
+        }
         {
           this.state.offset > 0 && <button onClick={this.handleBack.bind(this)}>BACK</button>
         }
@@ -110,7 +140,7 @@ class Restaurants extends React.Component {
   }
 }
 
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 
 export default connect(
   ({restaurants}) => ({
