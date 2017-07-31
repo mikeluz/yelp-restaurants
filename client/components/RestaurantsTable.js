@@ -15,6 +15,7 @@ class RestaurantsTable extends React.Component {
 		}
 	}
 
+	// sort click handler
 	handleSortClick(evt) {
 		sort(this.props.restaurants.businesses, evt.target.innerText.toLowerCase(), this.state.sortDirection);
 		if (this.state.sortDirection === "") {

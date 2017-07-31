@@ -7055,10 +7055,8 @@ var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var store = (0, _redux.createStore)(_reducers2['default'], (0, _reduxDevtoolsExtension.composeWithDevTools)((0, _redux.applyMiddleware)(
-// createLogger({collapsed: true}),
-_reduxThunk2['default'])));
-// import {createLogger} from 'redux-logger';
+var store = (0, _redux.createStore)(_reducers2['default'], (0, _reduxDevtoolsExtension.composeWithDevTools)((0, _redux.applyMiddleware)(_reduxThunk2['default'])));
+
 exports['default'] = store;
 
 /***/ }),
@@ -26583,6 +26581,9 @@ var Restaurants = function (_React$Component) {
     return _this;
   }
 
+  // live load as you type -- starts making calls with string length > 3
+
+
   _createClass(Restaurants, [{
     key: 'handleChange',
     value: function () {
@@ -26602,6 +26603,9 @@ var Restaurants = function (_React$Component) {
 
       return handleChange;
     }()
+
+    // get next 20 results
+
   }, {
     key: 'handleClick',
     value: function () {
@@ -26620,6 +26624,9 @@ var Restaurants = function (_React$Component) {
 
       return handleClick;
     }()
+
+    // go back 20 results
+
   }, {
     key: 'handleBack',
     value: function () {
@@ -26638,6 +26645,9 @@ var Restaurants = function (_React$Component) {
 
       return handleBack;
     }()
+
+    // using the browser's navigator.geolocation feature, get the user's coords and use those in API call to Yelp
+
   }, {
     key: 'locate',
     value: function () {
@@ -26669,6 +26679,9 @@ var Restaurants = function (_React$Component) {
 
       return locate;
     }()
+
+    // start over functionality
+
   }, {
     key: 'reload',
     value: function () {
@@ -26799,6 +26812,9 @@ var RestaurantsTable = function (_React$Component) {
 		};
 		return _this;
 	}
+
+	// sort click handler
+
 
 	_createClass(RestaurantsTable, [{
 		key: 'handleSortClick',
@@ -26935,6 +26951,7 @@ exports['default'] = RestaurantsTable;
 "use strict";
 
 
+// get time from date and convert from military time to standard 12 hr time
 function getCurrentTime() {
 	var today = Date();
 	var time = today.toString().slice(15, 24);
@@ -26947,8 +26964,16 @@ function getCurrentTime() {
 	}
 }
 
+// sort function for both sorting by rating and price
 function sort(arrayOfObjects, sortField, direction) {
-	if (typeof arrayOfObjects[0][sortField] === "number") {
+	var index = 0;
+	var sample = arrayOfObjects[index][sortField];
+	while (sample === undefined) {
+		index++;
+		sample = arrayOfObjects[index][sortField];
+	}
+	// if it's an number, sort by value
+	if (typeof sample === "number") {
 		arrayOfObjects.sort(function (a, b) {
 			if (direction === "asc") {
 				return a[sortField] - b[sortField];
@@ -26957,8 +26982,8 @@ function sort(arrayOfObjects, sortField, direction) {
 			}
 		});
 	}
-
-	if (typeof arrayOfObjects[0][sortField] === "string") {
+	// if it's a string, sort by string.length
+	if (typeof sample === "string") {
 		arrayOfObjects.sort(function (a, b) {
 			if (!a[sortField]) {
 				a[sortField] = "";

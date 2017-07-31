@@ -8,6 +8,13 @@ html {
 	background-position: center;
 }
 
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
 h1 {
 	background-color: transparent;
 }
@@ -17,6 +24,28 @@ button {
   background-color: transparent;
 	color: white;
 	margin: 5px;
+	font-family: 'Roboto', sans-serif;
+}
+
+button:hover {
+	cursor: pointer;
+}
+
+input {
+	width: 400px;
+	padding: 20px;
+	font-size: 20px;
+	background-color: rgba(255, 255, 255, 0.8);
+}
+
+table {
+	border: 2px solid black;
+	padding: 2px;
+}
+
+td {
+	border: 2px solid black;
+	padding: 2px;
 }
 
 .sortable {
@@ -25,6 +54,12 @@ button {
 
 .sortable:hover {
 	cursor: pointer;
+}
+
+#app {
+	font-family: 'Roboto', sans-serif;
+	text-align: center;
+	margin: auto;
 }
 
 #time {
@@ -47,28 +82,4 @@ button {
   background-color: white;
   position: fixed;
   top: 0;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-}
-
-#app {
-	font-family: 'Roboto', sans-serif;
-	text-align: center;
-	margin: auto;
-}
-
-button {
-	font-family: 'Roboto', sans-serif;
-}
-
-input {
-	width: 400px;
-	padding: 20px;
-	font-size: 20px;
-	background-color: rgba(255, 255, 255, 0.8);
 }

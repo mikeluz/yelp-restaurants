@@ -22,6 +22,7 @@ class Restaurants extends React.Component {
     };
   }
 
+  // live load as you type -- starts making calls with string length > 3
   handleChange(evt) {
     if (evt.target.value.length > 3) {
       axios.get(`/api/restaurants/${evt.target.value}/${this.state.offset}`)
@@ -37,6 +38,7 @@ class Restaurants extends React.Component {
     }
   }
 
+  // get next 20 results
   handleClick() {
     var offsetValue = this.state.offset + 20;
       axios.get(`/api/restaurants/${this.state.city}/${offsetValue}`)
@@ -51,6 +53,7 @@ class Restaurants extends React.Component {
     });
   }
 
+  // go back 20 results
   handleBack() {
     var offsetValue = this.state.offset - 20;
       axios.get(`/api/restaurants/${this.state.city}/${offsetValue}`)
@@ -65,6 +68,7 @@ class Restaurants extends React.Component {
     });
   }
 
+  // using the browser's navigator.geolocation feature, get the user's coords and use those in API call to Yelp
   locate() {
     this.setState({
       isLoading: true
@@ -90,12 +94,13 @@ class Restaurants extends React.Component {
     }, null, options);
   }
 
+  // start over functionality
   reload() {
     document.getElementsByTagName('input')[0].value = "";
     this.setState({
       city: "ENTER CITY AND STATE, OR ZIP CODE",
       offset: 0
-    })
+    });
     store.dispatch({
       type: "SET_RESTAURANTS", 
       restaurants: null
@@ -135,7 +140,7 @@ class Restaurants extends React.Component {
   }
 }
 
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 
 export default connect(
   ({restaurants}) => ({
