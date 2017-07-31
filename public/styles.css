@@ -23,8 +23,9 @@ button {
 	padding: 10px;
   background-color: transparent;
 	color: white;
-	margin: 5px;
+	margin: 10px;
 	font-family: 'Roboto', sans-serif;
+	width: 80px;
 }
 
 button:hover {
