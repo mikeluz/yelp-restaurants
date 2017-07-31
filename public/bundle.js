@@ -11966,30 +11966,6 @@ styles.table = {
   color: "black"
 };
 
-styles.inputStyle = {
-  display: 'table-cell',
-  padding: '2px',
-  margin: '2px',
-  zIndex: '6'
-};
-
-styles.headerStyle = {
-  marginTop: "51px",
-  marginBottom: '2px',
-  padding: "5px",
-  marginLeft: "auto",
-  marginRight: "auto",
-  backgroundColor: "rgba(252, 123, 42, 0.9)"
-};
-
-styles.predictiveDropdownStyles = {
-  fontSize: "10pt",
-  listStyle: "none",
-  width: "400px",
-  margin: "0px",
-  cursor: "pointer"
-};
-
 styles.inputContainerStyle = {
   height: "100vh",
   position: "relative",
@@ -11997,43 +11973,6 @@ styles.inputContainerStyle = {
   width: "100%",
   zIndex: "5",
   paddingTop: "10px"
-};
-
-styles.mapStyle = {
-  height: "100vh",
-  position: "absolute",
-  top: "0",
-  right: "0",
-  bottom: "0",
-  left: "0"
-};
-
-styles.mapContainerStyle = {
-  height: "100%"
-};
-
-styles.btnStyle = {
-  padding: "10px",
-  backgroundColor: "rgba(255, 255, 255, 0.8)",
-  left: "0%",
-  width: "40%",
-  marginTop: "2px",
-  border: "none",
-  top: "7px",
-  borderRadius: "20px"
-};
-
-styles.badInputWarning = {
-  position: "absolute",
-  width: "100%",
-  margin: "auto",
-  textAlign: "center",
-  backgroundColor: "red",
-  color: "white",
-  padding: "2px",
-  marginTop: "10px",
-  marginBottom: "10px"
-
 };
 
 module.exports = styles;
@@ -26638,7 +26577,8 @@ var Restaurants = function (_React$Component) {
 
     _this.state = {
       city: "ENTER CITY AND STATE, OR ZIP CODE",
-      offset: 0
+      offset: 0,
+      isLoading: false
     };
     return _this;
   }
@@ -26704,6 +26644,9 @@ var Restaurants = function (_React$Component) {
       function locate() {
         var _this2 = this;
 
+        this.setState({
+          isLoading: true
+        });
         var options = {
           enableHighAccuracy: true,
           timeout: 5000,
@@ -26717,13 +26660,31 @@ var Restaurants = function (_React$Component) {
               restaurants: res.data
             });
             _this2.setState({
-              city: res.data.businesses[0].location.city
+              city: res.data.businesses[0].location.city,
+              isLoading: false
             });
           });
         }, null, options);
       }
 
       return locate;
+    }()
+  }, {
+    key: 'reload',
+    value: function () {
+      function reload() {
+        document.getElementsByTagName('input')[0].value = "";
+        this.setState({
+          city: "ENTER CITY AND STATE, OR ZIP CODE",
+          offset: 0
+        });
+        _store2['default'].dispatch({
+          type: "SET_RESTAURANTS",
+          restaurants: null
+        });
+      }
+
+      return reload;
     }()
   }, {
     key: 'render',
@@ -26744,10 +26705,20 @@ var Restaurants = function (_React$Component) {
             placeholder: this.state.city
           }),
           _react2['default'].createElement('br', null),
-          _react2['default'].createElement(
+          !this.props.restaurants && !this.state.isLoading && _react2['default'].createElement(
             'button',
             { onClick: this.locate.bind(this) },
             'FIND ME'
+          ),
+          this.props.restaurants && !this.state.isLoading && _react2['default'].createElement(
+            'button',
+            { onClick: this.reload.bind(this) },
+            'TRY AGAIN'
+          ),
+          this.state.isLoading && _react2['default'].createElement(
+            'h1',
+            null,
+            'Loading...'
           ),
           this.state.offset > 0 && _react2['default'].createElement(
             'button',
@@ -26856,7 +26827,7 @@ var RestaurantsTable = function (_React$Component) {
 					{ id: 'restaurant-table', style: _styles2['default'].table },
 					_react2['default'].createElement(
 						'thead',
-						null,
+						{ id: 'table-header' },
 						_react2['default'].createElement(
 							'tr',
 							null,
@@ -26877,7 +26848,7 @@ var RestaurantsTable = function (_React$Component) {
 							),
 							_react2['default'].createElement(
 								'th',
-								null,
+								{ className: 'sortable' },
 								_react2['default'].createElement(
 									'a',
 									{ onClick: this.handleSortClick.bind(this) },
@@ -26886,7 +26857,7 @@ var RestaurantsTable = function (_React$Component) {
 							),
 							_react2['default'].createElement(
 								'th',
-								null,
+								{ className: 'sortable' },
 								_react2['default'].createElement(
 									'a',
 									{ onClick: this.handleSortClick.bind(this) },

@@ -17,7 +17,8 @@ class Restaurants extends React.Component {
     super(props);
     this.state = {
       city: "ENTER CITY AND STATE, OR ZIP CODE",
-      offset: 0
+      offset: 0,
+      isLoading: false
     };
   }
 
@@ -65,6 +66,9 @@ class Restaurants extends React.Component {
   }
 
   locate() {
+    this.setState({
+      isLoading: true
+    })
     var options = {
       enableHighAccuracy: true,
       timeout: 5000,
@@ -79,10 +83,23 @@ class Restaurants extends React.Component {
             restaurants: res.data
           });
           this.setState({
-            city: res.data.businesses[0].location.city
+            city: res.data.businesses[0].location.city,
+            isLoading: false
           });
         });
     }, null, options);
+  }
+
+  reload() {
+    document.getElementsByTagName('input')[0].value = "";
+    this.setState({
+      city: "ENTER CITY AND STATE, OR ZIP CODE",
+      offset: 0
+    })
+    store.dispatch({
+      type: "SET_RESTAURANTS", 
+      restaurants: null
+    });
   }
 
   render() {
@@ -94,7 +111,15 @@ class Restaurants extends React.Component {
         placeholder={this.state.city}
         ></input>
         <br/>
-        <button onClick={this.locate.bind(this)}>FIND ME</button>
+        {
+          (!this.props.restaurants && !this.state.isLoading) && <button onClick={this.locate.bind(this)}>FIND ME</button>
+        }
+        {
+          (this.props.restaurants && !this.state.isLoading) && <button onClick={this.reload.bind(this)}>TRY AGAIN</button>
+        }
+        {
+          this.state.isLoading && <h1>Loading...</h1>
+        }
         {
           this.state.offset > 0 && <button onClick={this.handleBack.bind(this)}>BACK</button>
         }

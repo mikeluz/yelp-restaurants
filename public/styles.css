@@ -19,6 +19,14 @@ button {
 	margin: 5px;
 }
 
+.sortable {
+	color: red;
+}
+
+.sortable:hover {
+	cursor: pointer;
+}
+
 #time {
 	text-align: center;
 }

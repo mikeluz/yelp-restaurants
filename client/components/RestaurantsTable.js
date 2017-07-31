@@ -31,13 +31,13 @@ class RestaurantsTable extends React.Component {
 	render() {
 		return (
 			<table id="restaurant-table" style={styles.table}>
-			<thead>
+			<thead id="table-header">
 			  <tr>
 			    <th>Name</th>
 			    <th>Address</th>
 			    <th>Phone Number</th>
-			    <th><a onClick={this.handleSortClick.bind(this)}>Rating</a></th>
-			    <th><a onClick={this.handleSortClick.bind(this)}>Price</a></th>
+			    <th className="sortable"><a onClick={this.handleSortClick.bind(this)}>Rating</a></th>
+			    <th className="sortable"><a onClick={this.handleSortClick.bind(this)}>Price</a></th>
 			    <th>Open?</th>
 			  </tr>
 		  </thead>
