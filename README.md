@@ -32,9 +32,9 @@ const auth = RESPONSE_OBJECT;
 module.exports = auth;
 
 NOTE: RESPONSE_OBJECT will look something like:
-const auth = {
+```const auth = {
   "access_token": YOUR_ACCESS_TOKEN,
   "expires_in": 15551999,
   "token_type": "Bearer"
-};
+};```
 
